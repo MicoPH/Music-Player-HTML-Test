@@ -106,7 +106,7 @@ body{
     font-weight: 700;
     font-size: 18px;
 }
-video{
+video, #coverpreview{
     position: absolute;
     top:50%;
     left:50%;
@@ -306,6 +306,9 @@ video{
     font-family: system-ui;
     font-weight: 700;
     float: right;
+}
+#coverpreview{
+    z-index: -6;
 }
 @media (max-width: 560px) {
     
