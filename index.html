@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link id="iconchanger" rel="icon" href="">
+    <link rel="stylesheet" href="font/sanfrancisco.css">
+    <link rel="stylesheet" href="css/player.css">
+    <title>Music Player | HTML</title>
+</head>
+<body>
+    <div class="darkfrostglass" id="regtrack">
+        <h1>Please Enter your Track URL:</h1>
+        <div class="cont">
+            <input type="text" name="" placeholder="Track URL" id="trackurl">
+            <button class="darkfrostglass btn" onclick="trackURL()">Send</button>
+        </div>
+        <span id="err"></span>
+    </div>
+    <section class="hide" id="player">
+        <div class="audioplayback top darkfrostglass" id="playback">
+            
+            <img alt="Album" class="albumimg" id="album">
+            <div class="metadata">
+                <h2 class="title" id="songTitle"></h2>
+                <span class="singer" id="songArtist"></span>
+                <span class="album" id="songAlbum"></span>
+                <p class="creditscopyright" id="songCopyright"></p>
+            </div>
+            <div class="playback">
+                
+                <div class="seekbar">
+                    <div class="seek">
+                        <div id="currentplayback" class="currentseek"></div>
+                        <div id="endplayback" class="maxseek"></div>
+                        <input type="range" name="" id="slider" value="0" min="0" max="100">
+                    </div>
+                    <div class="playbacktime">
+                        <h5 id="currentbar">0:00</h5>
+                        <h5 id="endbar">0:00</h5>
+                    </div>
+                </div>
+                <div class="controls">
+                    <img width="50" height="50" src="img/back.svg" alt="" class="prev" id="prev">
+                    <img width="50" height="50" src="img/play.svg" alt="" class="playpause" id="playpause">
+                    <img width="50" height="50" src="img/next.svg" alt="" class="next" id="next">
+                    <img width="50" height="50" src="img/lyric.svg" alt="" class="full" id="expndlrc">
+                </div>
+                <div id="volumecontainer">
+                    <img src="img/volume.svg" alt="">
+                    <div class="seekbar">
+                        <div class="seek">
+                            <div id="currentplaybackvol" class="currentseek"></div>
+                            <div class="maxseek"></div>
+                            <input type="range" name="" id="volumeslider" value="100" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <audio id="audiodata"></audio>
+        </div>
+        <div class="lyricpreview" style="display: none">
+            <div class="textbox">
+                <h3 class="text"></h3>
+            </div>
+        </div>
+        <div class="audioplayback darkfrostglass" id="expandplayback" style="display: none;">
+                <div class="seekbar">
+                    <div class="seek">
+                        <div id="currentplayback1" class="currentseek"></div>
+                        <div id="endplayback" class="maxseek"></div>
+                        <input type="range" name="" id="slider1" value="0" min="0" max="100">
+                    </div>
+                    <div class="playbacktime">
+                        <h5 id="currentbar1">0:00</h5>
+                        <h5 id="endbar1">0:00</h5>
+                    </div>
+                </div>
+                <div class="controls">
+                    <img width="50" height="50" src="img/back.svg" alt="" class="prev" id="prev1">
+                    <img width="50" height="50" src="img/play.svg" alt="" class="playpause" id="playpause1">
+                    <img width="50" height="50" src="img/next.svg" alt="" class="next" id="next1">
+                </div>
+                <div id="volumecontainer" class="expand">
+                    <img src="img/volume.svg" alt="">
+                    <div class="seekbar">
+                        <div class="seek">
+                            <div id="currentplaybackvol1" class="currentseek"></div>
+                            <div class="maxseek"></div>
+                            <input type="range" name="" id="volumeslider1" value="100" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="overlay"></div>
+        <div class="vid">
+            <video id="videopreview" autoplay muted loop></video>
+        </div>
+    </section>
+    <script>
+        const errormsg = document.getElementById("err");
+        let trackBool = false;
+        let mainJavaScript = false;
+        function trackURL(){
+            var inputurl = document.getElementById("trackurl");
+            if (inputurl.value === ""){
+                errormsg.innerHTML = "This input has no value";
+                return
+            }
+            const scriptbody1 = document.createElement("script");
+            scriptbody1.src = inputurl.value;
+            scriptbody1.id = "track";
+            scriptbody1.onerror = (error) => {
+                errormsg.innerHTML = "Invalid URL";
+                scriptbody1.remove();
+            }
+            scriptbody1.onload = () => {
+                const scriptbody2 = document.createElement("script");
+                scriptbody2.src = "js/script.js" ;
+                scriptbody2.onerror = (error) => {
+                    errormsg.innerHTML = "Invalid Main JS";
+                    scriptbody1.remove();
+                    scriptbody2.remove();
+                }
+                scriptbody2.onload = () => {
+                    document.getElementById("player").classList.remove('hide');
+                    document.getElementById("regtrack").remove();
+                }
+                document.body.appendChild(scriptbody2);
+            }
+            document.body.appendChild(scriptbody1);
+        }
+    </script>
+</body>
+</html>
