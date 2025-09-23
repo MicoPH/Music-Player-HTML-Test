@@ -1,33 +1,3 @@
-const music = document.querySelector("audio");
-const seekbar = document.getElementById("slider");
-const seekbar1 = document.getElementById("slider1");
-const playbutton = document.getElementById("playpause");
-const playbutton1 = document.getElementById("playpause1");
-const currentTextTime = document.getElementById('currentbar');
-const currentTextTime1 = document.getElementById('currentbar1');
-const endTextTime = document.getElementById('endbar');
-const endTextTime1 = document.getElementById('endbar1');
-const currentseek = document.getElementById('currentplayback');
-const currentseek1 = document.getElementById('currentplayback1');
-const playbackfunc = document.getElementById("playback");
-const songtitle = document.getElementById("songTitle");
-const songartist = document.getElementById("songArtist");
-const songalbum = document.getElementById("songAlbum");
-const copyrightowner = document.getElementById("songCopyright");
-const audiodata = document.getElementById("audiodata");
-const videodata = document.getElementById("videopreview");
-const albumdata = document.getElementById("album");
-const coverdata = document.getElementById("coverpreview");
-let isSeeking = false;
-let setExpand = false;
-let currentIndex = 0;
-const currentprogvol = document.getElementById('currentplaybackvol');
-const currentprogvol1 = document.getElementById('currentplaybackvol1');
-const volslide = document.getElementById('volumeslider');
-const volslide1 = document.getElementById('volumeslider1');
-const textlyric = document.querySelector(".lyricpreview .textbox h3");
-
-
 // Initial Audio
 audiodata.src = Tracks[currentIndex].audiosource;
 
@@ -63,18 +33,12 @@ music.addEventListener('loadedmetadata', () => {
 
 // Seek with changing audio time
 seekbar.addEventListener('click', (e) => {
-    const clickX = e.offsetX;
-    const seekbarwidth = seekbar.offsetWidth;
     seekbar1.value = seekbar.value;
-    const seektime = (clickX / seekbarwidth) * music.duration;
-    music.currentTime = seektime;
+    music.currentTime = (e.offsetX / seekbar.offsetWidth) * music.duration;
 });
 seekbar1.addEventListener('click', (e) => {
-    const clickX = e.offsetX;
-    const seekbarwidth = seekbar1.offsetWidth;
     seekbar.value = seekbar1.value;
-    const seektime = (clickX / seekbarwidth) * music.duration;
-    music.currentTime = seektime;
+    music.currentTime = (e.offsetX / seekbar1.offsetWidth) * music.duration;
 });
 
 // Idle audio process
@@ -86,8 +50,7 @@ music.addEventListener('timeupdate', () => {
         playbutton.src = "img/pause.svg";
         playbutton1.src = "img/pause.svg";
     };
-    const progpercentage = (music.currentTime / music.duration) * 100;
-    var currenttimer = progpercentage + '%';
+    var currenttimer = (music.currentTime / music.duration) * 100 + '%';
     if (!isSeeking){
         currentseek.style.width = currenttimer;
         currentseek1.style.width = currenttimer;
@@ -95,7 +58,7 @@ music.addEventListener('timeupdate', () => {
         seekbar1.value = music.currentTime;
     };
     if (setExpand){
-        colorbkgplayback = "linear-gradient(90deg,rgba(255,255,255,0.8) " + progpercentage +"%, rgba(59,59,59,0.4) "+ progpercentage+"%)";
+        colorbkgplayback = "linear-gradient(90deg,rgba(255,255,255,0.8) " + (music.currentTime / music.duration) * 100 +"%, rgba(59,59,59,0.4) "+ (music.currentTime / music.duration) * 100+"%)";
         playbackfunc.style.background = colorbkgplayback;
     };
     let currentTime = music.currentTime;
@@ -129,29 +92,19 @@ seekbar1.addEventListener('touchstart', () => {
 });
 seekbar.addEventListener('mousedown', () => {
     isSeeking = true;
-    const progpercentage1 = (seekbar.value / music.duration) * 100;
-    var currenttimer1 = progpercentage1 + '%';
-    currentseek.style.width = currenttimer1;
-    currentseek1.style.width = currenttimer1;
 });
 seekbar1.addEventListener('mousedown', () => {
     isSeeking = true;
-    const progpercentage1 = (seekbar1.value / music.duration) * 100;
-    var currenttimer1 = progpercentage1 + '%';
-    currentseek.style.width = currenttimer1;
-    currentseek1.style.width = currenttimer1;
 });
 
 // When moving seekbar
 seekbar.addEventListener('input', () => {
-    const progpercentage1 = (seekbar.value / music.duration) * 100;
-    var currenttimer1 = progpercentage1 + '%';
+    var currenttimer1 = (seekbar.value / music.duration) * 100 + '%';
     currentseek.style.width = currenttimer1;
     currentseek1.style.width = currenttimer1;
 });
 seekbar1.addEventListener('input', () => {
-    const progpercentage1 = (seekbar1.value / music.duration) * 100;
-    var currenttimer1 = progpercentage1 + '%';
+    var currenttimer1 = (seekbar1.value / music.duration) * 100 + '%';
     currentseek.style.width = currenttimer1;
     currentseek1.style.width = currenttimer1;
 });
@@ -194,14 +147,13 @@ document.getElementById("expndlrc").addEventListener('click', function(){
 // Lyric format are based on Subtitle Editor - Type 8 (JSON)
 // Idle Lyrics
 music.addEventListener('timeupdate', () => {
-    const musictime = music.currentTime;
-    if (lyricsync[0].start_time>musictime){
+    if (lyricsync[0].start_time>music.currentTime){
         textlyric.innerHTML = "";
         textlyric.setAttribute("data-text", "");
     }
     lyricsync.forEach((item) => {
-        if(musictime > item.start_time){
-            if (musictime > item.end_time){
+        if(music.currentTime > item.start_time){
+            if (music.currentTime > item.end_time){
                 textlyric.innerHTML = '';
                 return
             }

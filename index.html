@@ -98,6 +98,7 @@
             <img id="coverpreview"></img>
         </div>
     </section>
+    <script src="js/unassigned_declaration.js"></script>
     <script>
         const errormsg = document.getElementById("err");
         let trackBool = false;
@@ -116,6 +117,11 @@
                 scriptbody1.remove();
             }
             scriptbody1.onload = () => {
+                if (typeof Tracks === 'undefined') {
+                    errormsg.innerHTML = "[ERROR]: Invalid Data";
+                    scriptbody1.remove();
+                    return
+                }
                 const scriptbody2 = document.createElement("script");
                 scriptbody2.src = "js/script.js" ;
                 scriptbody2.onerror = (error) => {
